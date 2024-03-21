@@ -7,91 +7,88 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using JobMatchingWebMVC.Data;
 using JobMatchingWebMVC.Models;
-using System.Text;
-using Microsoft.CodeAnalysis;
 
 namespace JobMatchingWebMVC.Controllers
 {
-    public class UsersController : Controller
+    public class RolesController : Controller
     {
         private readonly JobMatchingWebMVCContext _context;
 
-        public UsersController(JobMatchingWebMVCContext context)
+        public RolesController(JobMatchingWebMVCContext context)
         {
             _context = context;
         }
 
-        // GET: Users
+        // GET: Roles
         public async Task<IActionResult> Index()
         {
-            var listUsers = await _context.Users.ToListAsync();
-            if (listUsers == null) return View("There aren't any users.");
-            else return View(listUsers);
+            return View(await _context.Roles.ToListAsync());
         }
 
-        // GET: Users/Details/5
-        public async Task<IActionResult> Details(Guid? id)
+        // GET: Roles/Details/5
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var users = await _context.Users
-                .FirstOrDefaultAsync(m => m.ID == id);
-            if (users == null)
+            var roles = await _context.Roles
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (roles == null)
             {
                 return NotFound();
             }
 
-            return View(users);
+            return View(roles);
         }
 
-        // GET: Users/Create
+        // GET: Roles/Create
         public IActionResult Create()
         {
             return View();
         }
 
+        // POST: Roles/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Email,Password,UserName,Role")] Users users)
+        public async Task<IActionResult> Create([Bind("Id,Name")] Roles roles)
         {
             if (ModelState.IsValid)
             {
-                users.ID = Guid.NewGuid();
-                if (users.Password != null) users.Password = Users.EncodePasswordToBase64(users.Password);
-                _context.Add(users);
+                _context.Add(roles);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(users);
+            return View(roles);
         }
 
-        // GET: Users/Edit/5
-        public async Task<IActionResult> Edit(Guid? id)
+        // GET: Roles/Edit/5
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var users = await _context.Users.FindAsync(id);
-            if (users == null)
+            var roles = await _context.Roles.FindAsync(id);
+            if (roles == null)
             {
                 return NotFound();
             }
-            return View(users);
+            return View(roles);
         }
 
-        // POST: Users/Edit/5
+        // POST: Roles/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("ID,Name,Email,Password,UserName,BirthDay,IsEmailConfirmed,IsMale,IsLocked,IsDeleted,Skills,Experience,Education,Location,Role")] Users users)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Roles roles)
         {
-            if (id != users.ID)
+            if (id != roles.Id)
             {
                 return NotFound();
             }
@@ -100,12 +97,12 @@ namespace JobMatchingWebMVC.Controllers
             {
                 try
                 {
-                    _context.Update(users);
+                    _context.Update(roles);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!UsersExists(users.ID))
+                    if (!RolesExists(roles.Id))
                     {
                         return NotFound();
                     }
@@ -116,45 +113,45 @@ namespace JobMatchingWebMVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(users);
+            return View(roles);
         }
 
-        // GET: Users/Delete/5
-        public async Task<IActionResult> Delete(Guid? id)
+        // GET: Roles/Delete/5
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var users = await _context.Users
-                .FirstOrDefaultAsync(m => m.ID == id);
-            if (users == null)
+            var roles = await _context.Roles
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (roles == null)
             {
                 return NotFound();
             }
 
-            return View(users);
+            return View(roles);
         }
 
-        // POST: Users/Delete/5
+        // POST: Roles/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(Guid id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var users = await _context.Users.FindAsync(id);
-            if (users != null)
+            var roles = await _context.Roles.FindAsync(id);
+            if (roles != null)
             {
-                _context.Users.Remove(users);
+                _context.Roles.Remove(roles);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool UsersExists(Guid id)
+        private bool RolesExists(int id)
         {
-            return _context.Users.Any(e => e.ID == id);
+            return _context.Roles.Any(e => e.Id == id);
         }
     }
 }

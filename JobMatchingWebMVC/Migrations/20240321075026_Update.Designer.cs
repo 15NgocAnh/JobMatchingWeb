@@ -4,6 +4,7 @@ using JobMatchingWebMVC.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JobMatchingWebMVC.Migrations
 {
     [DbContext(typeof(JobMatchingWebMVCContext))]
-    partial class JobMatchingWebMVCContextModelSnapshot : ModelSnapshot
+    [Migration("20240321075026_Update")]
+    partial class Update
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -63,23 +66,6 @@ namespace JobMatchingWebMVC.Migrations
                     b.ToTable("Jobs");
                 });
 
-            modelBuilder.Entity("JobMatchingWebMVC.Models.Roles", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Roles");
-                });
-
             modelBuilder.Entity("JobMatchingWebMVC.Models.Users", b =>
                 {
                     b.Property<Guid>("ID")
@@ -127,11 +113,14 @@ namespace JobMatchingWebMVC.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Skills")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
@@ -141,41 +130,11 @@ namespace JobMatchingWebMVC.Migrations
                     b.ToTable("users");
                 });
 
-            modelBuilder.Entity("RolesUsers", b =>
-                {
-                    b.Property<int>("RolesId")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("UsersID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("RolesId", "UsersID");
-
-                    b.HasIndex("UsersID");
-
-                    b.ToTable("RolesUsers");
-                });
-
             modelBuilder.Entity("JobMatchingWebMVC.Models.Users", b =>
                 {
                     b.HasOne("JobMatchingWebMVC.Models.Jobs", null)
                         .WithMany("Applicants")
                         .HasForeignKey("JobsId");
-                });
-
-            modelBuilder.Entity("RolesUsers", b =>
-                {
-                    b.HasOne("JobMatchingWebMVC.Models.Roles", null)
-                        .WithMany()
-                        .HasForeignKey("RolesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("JobMatchingWebMVC.Models.Users", null)
-                        .WithMany()
-                        .HasForeignKey("UsersID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("JobMatchingWebMVC.Models.Jobs", b =>

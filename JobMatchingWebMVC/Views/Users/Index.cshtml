@@ -45,11 +45,17 @@ else{
             <td>
                 @Html.DisplayFor(modelItem => item.IsLocked)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsDeleted)
+            <td> 
+                @if(item.IsDeleted == true)
+                {
+                    <button type="button" class="btn btn-danger">Delete</button>
+                } else
+                {
+                    <button type="button" class="btn btn-success">Active</button>
+                }
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Role)
+                        @Html.DisplayFor(modelItem => item.Roles)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |

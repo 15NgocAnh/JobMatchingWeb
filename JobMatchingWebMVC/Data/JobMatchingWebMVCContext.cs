@@ -16,7 +16,7 @@ namespace JobMatchingWebMVC.Data
 
         public DbSet<JobMatchingWebMVC.Models.Users> Users { get; set; }
         public DbSet<JobMatchingWebMVC.Models.Jobs> Jobs { get; set; }
+        public DbSet<JobMatchingWebMVC.Models.Roles> Roles { get; set; } = default!;
 
-        // public const string ConnectString = @"Data Source=HUE-ANHNTN\\ROOT;Initial Catalog=DBJobMatching;Integrated Security=True;Trust Server Certificate=True";
     }
 }
